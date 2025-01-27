@@ -159,3 +159,44 @@ export async function toggleFollow(targetUserId: string) {
     return { success: false, error: "Error toggling follow" };
   }
 }
+
+// 搜索用户(username | name)
+export async function searchUser(query: string) {
+  try {
+    // 我希望根据query（username or name）来模糊搜索用户，返回数据库中匹配到的用户信息
+    // 比如query是"john"，那么我希望返回所有username或name中包含"john"的用户信息
+    // 比如query是"john doe"，那么我希望返回所有username或name中包含"john"和"doe"的用户信息
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            name: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        _count: {
+          select: {
+            followers: true,
+          },
+        },
+      },
+    });
+    return users;
+  } catch (error) {
+    console.log("Error in searchUser", error);
+  }
+}

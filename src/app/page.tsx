@@ -4,6 +4,7 @@ import CreatePost from "@/components/CreatePost";
 import WhoToFollow from "@/components/WhoToFollow";
 import { getPosts } from "./actions/post.action";
 import PostCard from "@/components/PostCard";
+import SearchUser from "@/components/SearchUser";
 
 export default async function Home() {
   const user = await currentUser();
@@ -23,6 +24,7 @@ export default async function Home() {
       </div>
 
       <div className="hidden lg:block lg:col-span-4 sticky top-20">
+        <SearchUser />
         <WhoToFollow />
       </div>
     </div>
