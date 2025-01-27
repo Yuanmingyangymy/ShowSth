@@ -7,7 +7,7 @@ import { searchUser } from "@/app/actions/user.action";
 import { Input } from "./ui/input";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import FollowButton from "./FollowButton";
-import { CircleX, ShieldCloseIcon } from "lucide-react";
+import { CircleX } from "lucide-react";
 
 type SearchResult = {
   id: string;
@@ -29,10 +29,10 @@ function SearchUser() {
     if (term.length > 0) {
       const results = await searchUser(term);
       setSearchResults(results as SearchResult);
-      setIsLoading(false);
     } else {
       setSearchResults([]);
     }
+    setIsLoading(false);
   }, 100);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function SearchUser() {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const term = e.target.value;
+    const term = e.target.value.trim();
     setSearchTerm(term);
     handleSearch(term);
   };
@@ -63,7 +63,6 @@ function SearchUser() {
           className="w-full p-2 rounded-md"
         />
         {searchTerm.length > 0 && (
-          // <Button onClick={handleClearSearch}>Close</Button>
           <CircleX
             className="absolute right-2 w-4 h-4 cursor-pointer text-gray-300"
             onClick={handleClearSearch}
@@ -104,7 +103,6 @@ function SearchUser() {
                       </p>
                     </div>
                   </div>
-                  <FollowButton userId={user.id} />
                 </div>
               ))}
             </div>
